@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEMP-🌏-Login Screen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #568ad3 0%, #568ad3 50%, #568ad3 100%);
+        }
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        #mobileMenu {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+               <div class="flex items-center space-x-3">
+                    <div class="flex items-center justify-center"
+                        style="margin-top: 4px; margin-bottom: -8px;margin-right:-25px;">
+                        <img src="thumbnail_AA.png" alt="TEMPO"
+                            class="w-28 h-28 object-contain"> <!--LOGO-->
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">TEMP-🌏</h1>
+                        <p class="text-xs opacity-90">Air Quality Monitoring</p>
+                    </div>
+                </div>
+                
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-black bg-opacity-20">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <button onclick="showSection('home')" class="block w-full text-left px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-20 flex items-center gap-2">
+                    <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></div>
+                    Live
+                </button>
+                <button onclick="showSection('forecast')" class="block w-full text-left px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-20">Hava Durumu</button>
+                <button onclick="showSection('map')" class="block w-full text-left px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-20">Harita</button>
+                <button onclick="showSection('alerts')" class="block w-full text-left px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-20">Bildirimler</button>
+                <button onclick="showSection('settings')" class="block w-full text-left px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-20">Ayarlar</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Box -->
+    <div class="flex-1 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+            <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">User Login</h2>
+            
+            <form id="loginForm" class="space-y-6">
+                <!-- Kullanıcı Adı -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                       Username
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username"
+                        required
+                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition-colors duration-200 text-gray-700"
+                        placeholder="Enter your username"
+                    >
+                </div>
+
+                <!-- Şifre -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                       Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password"
+                        required
+                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition-colors duration-200 text-gray-700"
+                        placeholder="Enter your password"
+                    >
+                </div>
+
+                <!-- Giriş Butonu -->
+                <button 
+                    type="submit"
+                    class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 mt-6"
+                >
+                    Login
+                </button>
+            </form>
+
+            <!-- Mesaj Gösterimi -->
+            <div id="message" class="mt-4 text-center hidden"></div>
+            
+            <!-- Alt Linkler -->
+            <div class="mt-6 text-center space-y-2">
+                <p class="text-sm text-gray-600">
+                    <a href="http://127.0.0.1:5500/%C4%B1ng5.html" class="text-blue-600 hover:text-blue-800 transition-colors">Sign Up</a>
+                </p>
+                <p class="text-sm text-gray-600">
+                    <a href="http://127.0.0.1:5500/sifrem%C4%B1unuttum.html" class="text-blue-600 hover:text-blue-800 transition-colors">Forgot Password</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form submit işlemi
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loginData = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                const result = await response.json();
+                
+                const messageDiv = document.getElementById('message');
+                messageDiv.classList.remove('hidden');
+                
+                if (response.ok && result.success) {
+                    messageDiv.className = 'mt-4 text-center text-green-600 font-semibold';
+                    messageDiv.textContent = `Hoş geldiniz ${result.name}! Yönlendiriliyorsunuz...`;
+                    
+                    // Kullanıcı bilgilerini localStorage'a kaydet
+                    localStorage.setItem('user', JSON.stringify({
+                        id: result.user_id,
+                        name: result.name,
+                        surname: result.surname,
+                        username: result.username
+                    }));
+                    
+                    // 2 saniye sonra ana sayfaya yönlendir
+                    setTimeout(() => {
+                        window.location.href = 'http://127.0.0.1:5500/deneme.html';
+                    }, 2000);
+                } else {
+                    messageDiv.className = 'mt-4 text-center text-red-600 font-semibold';
+                    messageDiv.textContent = result.detail || 'Giriş başarısız!';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const messageDiv = document.getElementById('message');
+                messageDiv.classList.remove('hidden');
+                messageDiv.className = 'mt-4 text-center text-red-600 font-semibold';
+                messageDiv.textContent = 'Backend bağlantı hatası!';
+            }
+        });
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        function showSection(section) {
+            console.log('Showing section:', section);
+            // Bu fonksiyonu ihtiyacınıza göre genişletebilirsiniz
+        }
+
+        // Sayfa yüklendiğinde kullanıcı giriş yapmış mı kontrol et
+        window.addEventListener('load', function() {
+            const user = localStorage.getItem('user');
+            if (user) {
+                console.log('Zaten giriş yapılmış:', JSON.parse(user));
+            }
+        });
+    </script>
+</body>
+</html>
