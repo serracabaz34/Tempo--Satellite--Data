@@ -1,0 +1,14 @@
+pydantic
+pathlib 
+mysql.connector
+fastapi 
+requests
+datetime
+time
+netCDF4
+geopy.distance
+numpy
+math
+traceback
+os
+uvicorn
