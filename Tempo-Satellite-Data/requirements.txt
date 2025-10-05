@@ -12,3 +12,4 @@ math
 traceback
 os
 uvicorn
+jinja2
